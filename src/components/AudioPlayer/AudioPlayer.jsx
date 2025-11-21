@@ -79,11 +79,7 @@ const AudioPlayer = ({ audioSrc, title = "Lời hát Mường" }) => {
   const progressPercentage = duration ? (currentTime / duration) * 100 : 0
 
   if (!audioSrc) {
-    return (
-      <div className="audio-player-placeholder">
-        <p>💡 Audio file sẽ được thêm vào đây. Vui lòng upload file audio từ Canva design.</p>
-      </div>
-    )
+    return null
   }
 
   return (
