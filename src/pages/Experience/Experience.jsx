@@ -28,18 +28,13 @@ const Experience = () => {
 
           <div className="experience-embed">
             <div className="embed-container">
-              {/* Placeholder for Artsteps embedded code */}
-              <div className="embed-placeholder">
-                <div className="placeholder-content">
-                  <div className="placeholder-icon">🎨</div>
-                  <h3>Trải nghiệm 3D</h3>
-                  <p>Nội dung trải nghiệm 3D sẽ được hiển thị tại đây</p>
-                  <p className="placeholder-note">
-                    Embedded code từ Artsteps sẽ được thêm vào sau
-                  </p>
-                </div>
-              </div>
-              {/* Artsteps embed will be inserted here when provided */}
+              <iframe
+                src="https://www.artsteps.com/embed/690ea005946eb56bb0553f5a/560/315"
+                title="Trải nghiệm 3D Bảo tàng Văn hóa Mường"
+                className="experience-iframe"
+                allow="fullscreen"
+                allowFullScreen
+              ></iframe>
             </div>
           </div>
 
