@@ -1,0 +1,222 @@
+.characteristics-page {
+  width: 100%;
+}
+
+.hero-section {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  color: var(--color-white);
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.page-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-white);
+}
+
+.music-characteristics,
+.lyrics-skill,
+.hat-dum-role {
+  padding: 60px 0;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.section-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.section-header .section-title {
+  font-size: 2.5rem;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.content-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.content-layout.reverse {
+  direction: rtl;
+}
+
+.content-layout.reverse > * {
+  direction: ltr;
+}
+
+.content-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--color-text);
+}
+
+.content-text p {
+  margin-bottom: 1.5rem;
+}
+
+.content-text strong {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.instruments-preview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.instrument-item {
+  text-align: center;
+}
+
+.instrument-item img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+}
+
+.instrument-item h3 {
+  font-size: 1.25rem;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.artisan-image {
+  text-align: center;
+}
+
+.artisan-image img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  margin-bottom: 1rem;
+}
+
+.image-caption {
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+  font-style: italic;
+  margin: 0;
+}
+
+.role-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.role-image {
+  width: 100%;
+}
+
+.role-image img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.role-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--color-text);
+}
+
+.role-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+}
+
+.role-list li {
+  padding: 0.75rem 0;
+  padding-left: 2rem;
+  position: relative;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.role-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--color-primary);
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.role-text p {
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 968px) {
+  .page-title {
+    font-size: 2.5rem;
+  }
+
+  .content-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .content-layout.reverse {
+    direction: ltr;
+  }
+
+  .instruments-preview {
+    grid-template-columns: 1fr;
+  }
+
+  .artisan-image {
+    order: -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 2rem;
+  }
+
+  .hero-section {
+    padding: 2rem 0;
+  }
+
+  .section-header .section-title {
+    font-size: 2rem;
+  }
+
+  .section-icon {
+    font-size: 2.5rem;
+  }
+
+  .music-characteristics,
+  .lyrics-skill,
+  .hat-dum-role {
+    padding: 40px 0;
+  }
+
+  .content-text,
+  .role-text {
+    font-size: 1rem;
+  }
+
+  .role-image img,
+  .artisan-image img {
+    height: 300px;
+  }
+}
+
