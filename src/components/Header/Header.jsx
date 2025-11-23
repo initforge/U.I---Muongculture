@@ -22,7 +22,7 @@ const Header = () => {
   }
 
   return (
-    <header className="header">
+    <header className="header" style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 1000, width: '100%', backgroundColor: 'white' }}>
       {/* Top Banner */}
       <div className="header-top">
         <div className="header-top-container container">

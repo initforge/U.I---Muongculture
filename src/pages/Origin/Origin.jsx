@@ -3,12 +3,6 @@ import './Origin.css'
 const Origin = () => {
   return (
     <div className="origin-page">
-      <section className="section hero-section">
-        <div className="container">
-          <h1 className="page-title">Nguồn gốc</h1>
-        </div>
-      </section>
-
       {/* Section 1: Giới thiệu chung */}
       <section className="section content-section">
         <div className="container">

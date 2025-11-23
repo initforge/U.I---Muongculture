@@ -3,21 +3,19 @@ import './Lyrics.css'
 const Lyrics = () => {
   return (
     <div className="lyrics-page">
-      <section className="section hero-section">
-        <div className="container">
-          <h1 className="page-title">Lời hát Mường</h1>
-          <p className="hero-subtitle">
-            Khám phá vẻ đẹp của lời ca trong âm nhạc truyền thống Mường
-          </p>
-        </div>
-      </section>
-
       <section className="section content-section">
         <div className="container">
+          <div className="section-header">
+            <div className="section-icon">🎤</div>
+            <h2 className="section-title">Lời hát Hát Đúm</h2>
+          </div>
+
           <div className="lyrics-intro">
-            <h2>Lời hát Mường</h2>
             <p>
-              Lời hát Mường thường được ứng tác trong các buổi hát Đúm, thể hiện sự thông minh, tài năng và vốn từ vựng phong phú của các nghệ nhân. Đây là một di sản văn hóa quý giá cần được bảo tồn và phát huy.
+              Lời hát trong văn hóa Hát Đúm không chỉ đơn thuần là từ ngữ, mà là một nghệ thuật tinh tế kết hợp giữa ngôn từ, vần điệu và cảm xúc. Mỗi câu hát đều mang trong mình những câu chuyện, những bài học và giá trị văn hóa sâu sắc.
+            </p>
+            <p>
+              Lời hát Hát Đúm thường được ứng tác trong các buổi hát Đúm, thể hiện sự thông minh, tài năng và vốn từ vựng phong phú của các nghệ nhân. Đây là một di sản văn hóa quý giá cần được bảo tồn và phát huy.
             </p>
           </div>
 

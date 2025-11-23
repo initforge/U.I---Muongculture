@@ -3,17 +3,12 @@ import './Characteristics.css'
 const Characteristics = () => {
   return (
     <div className="characteristics-page">
-      <section className="section hero-section">
-        <div className="container">
-          <h1 className="page-title">Đặc trưng văn hóa Mường</h1>
-        </div>
-      </section>
-
       {/* Section 1: Đặc trưng âm nhạc */}
       <section className="section music-characteristics">
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">Đặc trưng</h2>
+            <div className="section-icon">🎵</div>
+            <h2 className="section-title">Đặc trưng âm nhạc</h2>
           </div>
           
           <div className="content-layout">
@@ -47,6 +42,7 @@ const Characteristics = () => {
       <section className="section lyrics-skill decorative-pattern">
         <div className="container">
           <div className="section-header">
+            <div className="section-icon">✍️</div>
             <h2 className="section-title">Kỹ năng tạo lời hát</h2>
           </div>
 
@@ -75,6 +71,7 @@ const Characteristics = () => {
       <section className="section hat-dum-role">
         <div className="container">
           <div className="section-header">
+            <div className="section-icon">🎭</div>
             <h2 className="section-title">Vai trò của điệu hát Đúm</h2>
           </div>
 

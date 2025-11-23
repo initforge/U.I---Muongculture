@@ -17,60 +17,125 @@
 }
 
 .instrument-section {
-  padding: 60px 0;
+  padding: 48px 0;
 }
 
 .instrument-header {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2.4rem;
 }
 
 .instrument-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+  font-size: 2.4rem;
+  margin-bottom: 0.8rem;
 }
 
 .instrument-title {
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: var(--color-primary);
   margin: 0;
 }
 
 .instrument-content {
+  width: 100%;
+}
+
+.content-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2.8rem;
+  align-items: start;
+}
+
+.content-layout.reverse {
+  direction: rtl;
+}
+
+.content-layout.reverse > * {
+  direction: ltr;
+}
+
+.dan-nhi-layout {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 2rem;
 }
 
-.instrument-description {
-  font-size: 1.1rem;
-  line-height: 1.8;
+.dan-nhi-text-top {
+  font-size: 0.88rem;
+  line-height: 1.85;
   color: var(--color-text);
+  padding: 1.2rem;
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--color-primary);
 }
 
-.instrument-description p {
-  margin-bottom: 1.5rem;
+.dan-nhi-text-top p {
+  margin-bottom: 1.2rem;
 }
 
-.instrument-description strong {
+.dan-nhi-text-top p:last-child {
+  margin-bottom: 0;
+}
+
+.dan-nhi-text-top strong {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.dan-nhi-media-center {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.dan-nhi-text-bottom {
+  font-size: 0.88rem;
+  line-height: 1.85;
+  color: var(--color-text);
+  padding: 1.2rem;
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--color-primary);
+}
+
+.content-text {
+  font-size: 0.88rem;
+  line-height: 1.85;
+  color: var(--color-text);
+  padding: 1.2rem;
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--color-primary);
+}
+
+.content-text p {
+  margin-bottom: 1.2rem;
+}
+
+.content-text p:last-child {
+  margin-bottom: 0;
+}
+
+.content-text strong {
   color: var(--color-primary);
   font-weight: 600;
 }
 
 .parts-list {
-  margin-top: 2rem;
-}
-
-.parts-list {
-  margin-top: 1.5rem;
+  margin-top: 1.2rem;
 }
 
 .parts-list ol {
-  padding-left: 1.5rem;
+  padding-left: 1.2rem;
 }
 
 .parts-list li {
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
   line-height: 1.8;
 }
 
@@ -78,284 +143,91 @@
   color: var(--color-primary);
 }
 
-.instrument-diagram {
-  width: 100%;
-  background-color: var(--color-bg);
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.diagram-container {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.diagram {
-  position: relative;
-  padding: 2rem;
-}
-
-.diagram-flute {
-  position: relative;
-  width: 100%;
-  height: 400px;
-  margin: 0 auto;
-}
-
-.flute-body {
-  position: absolute;
-  left: 50%;
-  top: 20px;
-  transform: translateX(-50%);
-  width: 40px;
-  height: 360px;
-  background: linear-gradient(to right, #8B7355, #A0826D);
-  border-radius: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.flute-hole {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  background-color: #333;
-  border-radius: 50%;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.hole-1 {
-  top: 40px;
-}
-
-.hole-2 {
-  top: 120px;
-}
-
-.hole-3 {
-  top: 180px;
-}
-
-.hole-4 {
-  top: 280px;
-}
-
-.hole-5 {
-  top: 320px;
-}
-
-.flute-joint {
-  position: absolute;
-  left: 50%;
-  top: 240px;
-  transform: translateX(-50%);
-  width: 50px;
-  height: 8px;
-  background-color: #654321;
-  border-radius: 4px;
-}
-
-.flute-cover {
-  position: absolute;
-  left: 50%;
-  top: 30px;
-  transform: translateX(-50%);
-  width: 50px;
-  height: 15px;
-  background-color: #228B22;
-  border-radius: 4px;
-}
-
-.diagram-labels {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-}
-
-.label {
-  position: absolute;
-  font-size: 0.85rem;
-  color: var(--color-text);
-  font-weight: 500;
-}
-
-.label-top {
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-}
-
-.label-length-top {
-  top: 60px;
-  right: 10px;
-}
-
-.label-length-side {
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%) rotate(-90deg);
-  transform-origin: center;
-}
-
-.label-joint {
-  top: 240px;
-  right: 10px;
-}
-
-.label-cover {
-  top: 35px;
-  right: 10px;
-}
-
-.label-thumb {
-  top: 280px;
-  right: 10px;
-}
-
-.label-pinky {
-  top: 320px;
-  right: 10px;
-}
-
-.dan-nhi-diagram {
-  max-width: 500px;
-  margin: 0 auto;
-  padding: 2rem;
-  background-color: var(--color-white);
-  border-radius: 8px;
-}
-
-.dan-nhi-parts {
-  position: relative;
-  width: 100%;
-  height: 400px;
-  background: linear-gradient(to bottom, #F5F5DC, #E8E8D8);
-  border-radius: 8px;
-  border: 2px solid var(--color-border);
-}
-
-.part {
-  position: absolute;
-  padding: 0.5rem 1rem;
-  background-color: var(--color-primary);
-  color: var(--color-white);
-  border-radius: 4px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.part-truc-day {
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.part-cung-vi {
-  top: 60px;
-  right: 20px;
-}
-
-.part-cu-nhi {
-  top: 100px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.part-can-nhi {
-  top: 150px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  text-align: center;
-}
-
-.part-bat-nhi {
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120px;
-  text-align: center;
-}
-
 .instrument-media {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-}
-
-.instrument-image {
-  text-align: center;
-}
-
-.instrument-image img {
+  gap: 1.2rem;
   width: 100%;
-  max-width: 800px;
-  height: 500px;
-  object-fit: cover;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  margin: 0 auto;
+  height: 100%;
 }
 
-.instrument-video {
-  text-align: center;
+.media-item {
+  width: 100%;
+  position: relative;
+}
+
+.media-item img {
+  width: 100%;
+  height: auto;
+  max-height: 360px;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  transition: transform 0.4s ease;
+  background: var(--color-white);
+  padding: 0.8rem;
+}
+
+.media-item:hover img {
+  transform: scale(1.02);
+}
+
+.video-item {
+  padding: 1.2rem;
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-light);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
 }
 
 .video-player {
   width: 100%;
-  max-width: 800px;
   height: auto;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
+  min-height: 240px;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   background: var(--color-bg);
 }
 
-.video-caption {
-  font-size: 0.9rem;
-  color: var(--color-text-light);
-  font-style: italic;
-  margin: 0.75rem 0 0 0;
-}
-
 .image-caption {
-  font-size: 0.9rem;
-  color: var(--color-text-light);
-  font-style: italic;
+  font-size: 0.76rem;
+  color: var(--color-text);
+  font-weight: 500;
   margin: 0;
+  text-align: center;
+  font-style: normal;
 }
 
 @media (max-width: 968px) {
-  .page-title {
-    font-size: 2.5rem;
-  }
-
   .instrument-title {
     font-size: 2rem;
   }
 
-  .diagram-flute {
-    height: 300px;
+  .content-layout {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
   }
 
-  .flute-body {
-    height: 260px;
+  .content-layout.reverse {
+    direction: ltr;
+  }
+
+  .instrument-media {
+    order: -1;
+  }
+
+  .media-item img {
+    max-height: 280px;
+  }
+
+  .video-player {
+    min-height: 200px;
   }
 }
 
 @media (max-width: 768px) {
-  .page-title {
-    font-size: 2rem;
-  }
-
-  .hero-section {
-    padding: 2rem 0;
-  }
-
   .instrument-section {
     padding: 40px 0;
   }
@@ -364,25 +236,22 @@
     font-size: 1.75rem;
   }
 
-  .instrument-description {
+  .content-text {
     font-size: 1rem;
+    padding: 1.25rem;
   }
 
-  .diagram-flute {
-    height: 250px;
+  .media-item img {
+    max-height: 224px;
+    padding: 0.4rem;
   }
 
-  .flute-body {
-    height: 210px;
-    width: 30px;
+  .video-item {
+    padding: 0.8rem;
   }
 
-  .instrument-image img {
-    height: 300px;
-  }
-
-  .dan-nhi-parts {
-    height: 300px;
+  .video-player {
+    min-height: 160px;
   }
 }
 

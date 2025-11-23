@@ -3,21 +3,16 @@ import './Stories.css'
 const Stories = () => {
   return (
     <div className="stories-page">
-      <section className="section hero-section">
-        <div className="container">
-          <h1 className="page-title">Truyện Mường</h1>
-          <p className="hero-subtitle">
-            Khám phá những câu chuyện truyền thống đầy ý nghĩa của dân tộc Mường
-          </p>
-        </div>
-      </section>
-
       <section className="section content-section">
         <div className="container">
+          <div className="section-header">
+            <div className="section-icon">📖</div>
+            <h2 className="section-title">Truyện Hát Đúm</h2>
+          </div>
+
           <div className="story-intro">
-            <h2>Truyện Mường</h2>
             <p>
-              Khám phá những câu chuyện truyền thống đầy ý nghĩa của dân tộc Mường, nơi mỗi câu chuyện đều mang trong mình những bài học sâu sắc về cuộc sống, tình yêu, và giá trị nhân văn. Những câu chuyện này được truyền từ đời này sang đời khác, góp phần bảo tồn và phát huy giá trị văn hóa truyền thống của dân tộc Mường.
+              Đắm chìm trong những câu chuyện cổ tích và truyền thuyết của người Mường, nơi mỗi câu chuyện đều mang trong mình những bài học sâu sắc về cuộc sống, tình yêu, và giá trị nhân văn. Những câu chuyện này được truyền từ đời này sang đời khác, góp phần bảo tồn và phát huy giá trị văn hóa truyền thống của dân tộc Mường.
             </p>
           </div>
 

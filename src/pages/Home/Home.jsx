@@ -20,46 +20,27 @@ const Home = () => {
 
   return (
     <div className="home">
-      {/* Hero Section with Profile and Video */}
+      {/* Hero Section with Video and Carousel */}
       <section className="hero-section">
         <div className="container">
-          <div className="hero-content">
-            <div className="hero-left">
-              <div className="profile-section">
-                <div className="profile-image-wrapper">
-                  <img 
-                    src="https://res.cloudinary.com/dghawsj8e/image/upload/v1763866463/bao1_dh3dg5.jpg" 
-                    alt="Profile" 
-                    className="profile-image"
-                  />
-                </div>
+          <div className="hero-media-grid">
+            <div className="carousel-section">
+              <Carousel images={carouselImages} autoPlayInterval={5000} />
+            </div>
+            <div className="video-section">
+              <div className="video-wrapper">
+                <iframe
+                  width="560"
+                  height="315"
+                  src="https://www.youtube.com/embed/6Lpem8amhxk?si=i7a20FOHzhoBZvPR"
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                ></iframe>
               </div>
             </div>
-            <div className="hero-right">
-              <div className="video-section">
-                <div className="video-wrapper">
-                  <iframe
-                    width="560"
-                    height="315"
-                    src="https://www.youtube.com/embed/6Lpem8amhxk?si=i7a20FOHzhoBZvPR"
-                    title="YouTube video player"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Hero Carousel Section */}
-      <section className="hero-carousel-section">
-        <div className="container">
-          <div className="carousel-section">
-            <Carousel images={carouselImages} autoPlayInterval={5000} />
           </div>
         </div>
       </section>
