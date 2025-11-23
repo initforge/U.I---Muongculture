@@ -16,6 +16,7 @@ function AppContent() {
   const location = useLocation()
   const audioRef = useRef(null)
   const saveTimeIntervalRef = useRef(null)
+  const audioUnlockedRef = useRef(false)
   const isHomePage = location.pathname === '/'
 
   // Initialize audio element immediately
@@ -25,6 +26,64 @@ function AppContent() {
     audioRef.current.loop = true
     audioRef.current.preload = 'auto'
   }
+
+  // Unlock audio on first user interaction (required for autoplay on HTTPS)
+  useEffect(() => {
+    const unlockAudio = async () => {
+      if (!audioUnlockedRef.current && audioRef.current) {
+        try {
+          // Try to play and immediately pause to unlock audio context
+          await audioRef.current.play()
+          audioRef.current.pause()
+          audioRef.current.currentTime = 0
+          audioUnlockedRef.current = true
+          
+          // If on home page, play again
+          if (location.pathname === '/') {
+            const savedTime = localStorage.getItem('homeAudioTime')
+            if (savedTime) {
+              audioRef.current.currentTime = parseFloat(savedTime)
+            }
+            await audioRef.current.play()
+          }
+        } catch (error) {
+          // Audio still blocked, will try again on next interaction
+        }
+      }
+    }
+
+    // Listen for any user interaction
+    const events = ['click', 'touchstart', 'keydown', 'scroll']
+    const handlers = events.map(event => {
+      const handler = () => {
+        unlockAudio()
+        // Remove listeners after first successful unlock
+        events.forEach(e => {
+          document.removeEventListener(e, handlers[events.indexOf(e)])
+        })
+      }
+      document.addEventListener(event, handler, { once: true, passive: true })
+      return handler
+    })
+
+    // Also try on page visibility change (when user switches back to tab)
+    const handleVisibilityChange = () => {
+      if (!document.hidden && location.pathname === '/' && audioUnlockedRef.current) {
+        const audio = audioRef.current
+        if (audio && audio.paused) {
+          audio.play().catch(() => {})
+        }
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    return () => {
+      events.forEach((event, index) => {
+        document.removeEventListener(event, handlers[index])
+      })
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
+  }, [location.pathname])
 
   // Play audio on initial mount if on home page
   useEffect(() => {
@@ -45,7 +104,7 @@ function AppContent() {
         try {
           await audio.play()
         } catch (error) {
-          console.log('Audio autoplay blocked, waiting for user interaction')
+          // Audio blocked - will be unlocked on user interaction
         }
       }
 
@@ -69,30 +128,35 @@ function AppContent() {
       // Try immediately
       tryPlay()
 
-      // Retry with delays
+      // Retry with delays (longer delays for production)
       const timeouts = [
         setTimeout(() => {
-          if (audio.paused && audio.readyState >= 2) {
+          if (audio.paused && audio.readyState >= 2 && audioUnlockedRef.current) {
             playAudio()
           }
-        }, 200),
+        }, 300),
         setTimeout(() => {
-          if (audio.paused && audio.readyState >= 2) {
+          if (audio.paused && audio.readyState >= 2 && audioUnlockedRef.current) {
             playAudio()
           }
-        }, 500),
+        }, 800),
         setTimeout(() => {
-          if (audio.paused && audio.readyState >= 2) {
+          if (audio.paused && audio.readyState >= 2 && audioUnlockedRef.current) {
             playAudio()
           }
-        }, 1000)
+        }, 1500),
+        setTimeout(() => {
+          if (audio.paused && audio.readyState >= 2 && audioUnlockedRef.current) {
+            playAudio()
+          }
+        }, 2500)
       ]
 
       return () => {
         timeouts.forEach(timeout => clearTimeout(timeout))
       }
     }
-  }, []) // Only run once on mount
+  }, [location.pathname]) // Run when pathname changes
 
   // Play audio when navigating to home page
   useEffect(() => {
@@ -111,20 +175,23 @@ function AppContent() {
       try {
         await audio.play()
       } catch (error) {
-        console.log('Audio autoplay blocked')
+        // Audio blocked - will be unlocked on user interaction
       }
     }
 
-    // If audio is ready and paused, play it
-    if (audio.readyState >= 2 && audio.paused) {
-      playAudio()
-    } else {
-      const handleCanPlay = () => {
-        if (audio.paused) {
-          playAudio()
+    // Only try to play if audio is unlocked or if it's already playing
+    if (audioUnlockedRef.current || !audio.paused) {
+      // If audio is ready and paused, play it
+      if (audio.readyState >= 2 && audio.paused) {
+        playAudio()
+      } else {
+        const handleCanPlay = () => {
+          if (audio.paused) {
+            playAudio()
+          }
         }
+        audio.addEventListener('canplay', handleCanPlay, { once: true })
       }
-      audio.addEventListener('canplay', handleCanPlay, { once: true })
     }
   }, [isHomePage])
 
