@@ -26,7 +26,75 @@ function AppContent() {
     audioRef.current.preload = 'auto'
   }
 
-  // Initialize and try to play audio on first load (when on home page)
+  // Play audio on initial mount if on home page
+  useEffect(() => {
+    const audio = audioRef.current
+    if (!audio) return
+
+    // Check if we're on home page on initial load
+    if (location.pathname === '/') {
+      const savedTime = localStorage.getItem('homeAudioTime')
+      
+      const playAudio = async () => {
+        if (savedTime) {
+          audio.currentTime = parseFloat(savedTime)
+        } else {
+          audio.currentTime = 0
+        }
+        
+        try {
+          await audio.play()
+        } catch (error) {
+          console.log('Audio autoplay blocked, waiting for user interaction')
+        }
+      }
+
+      // Try to play with multiple strategies
+      const tryPlay = () => {
+        if (audio.readyState >= 2) {
+          if (audio.paused) {
+            playAudio()
+          }
+        } else {
+          const handleReady = () => {
+            playAudio()
+          }
+          
+          audio.addEventListener('canplay', handleReady, { once: true })
+          audio.addEventListener('canplaythrough', handleReady, { once: true })
+          audio.addEventListener('loadeddata', handleReady, { once: true })
+        }
+      }
+
+      // Try immediately
+      tryPlay()
+
+      // Retry with delays
+      const timeouts = [
+        setTimeout(() => {
+          if (audio.paused && audio.readyState >= 2) {
+            playAudio()
+          }
+        }, 200),
+        setTimeout(() => {
+          if (audio.paused && audio.readyState >= 2) {
+            playAudio()
+          }
+        }, 500),
+        setTimeout(() => {
+          if (audio.paused && audio.readyState >= 2) {
+            playAudio()
+          }
+        }, 1000)
+      ]
+
+      return () => {
+        timeouts.forEach(timeout => clearTimeout(timeout))
+      }
+    }
+  }, []) // Only run once on mount
+
+  // Play audio when navigating to home page
   useEffect(() => {
     const audio = audioRef.current
     if (!audio || !isHomePage) return
@@ -34,7 +102,6 @@ function AppContent() {
     const savedTime = localStorage.getItem('homeAudioTime')
     
     const playAudio = async () => {
-      // Restore saved time if exists, otherwise start from beginning
       if (savedTime) {
         audio.currentTime = parseFloat(savedTime)
       } else {
@@ -44,47 +111,20 @@ function AppContent() {
       try {
         await audio.play()
       } catch (error) {
-        console.log('Audio autoplay blocked, waiting for user interaction')
+        console.log('Audio autoplay blocked')
       }
     }
 
-    // Try multiple approaches to ensure audio plays
-    const tryPlay = () => {
-      if (audio.readyState >= 2) {
-        // Audio is ready
+    // If audio is ready and paused, play it
+    if (audio.readyState >= 2 && audio.paused) {
+      playAudio()
+    } else {
+      const handleCanPlay = () => {
         if (audio.paused) {
           playAudio()
         }
-      } else {
-        // Wait for audio to be ready
-        const handleCanPlay = () => {
-          playAudio()
-        }
-        audio.addEventListener('canplay', handleCanPlay, { once: true })
-        audio.addEventListener('loadeddata', handleCanPlay, { once: true })
-        audio.addEventListener('loadedmetadata', () => {
-          // Try to play after metadata is loaded
-          setTimeout(() => {
-            if (audio.paused && audio.readyState >= 2) {
-              playAudio()
-            }
-          }, 100)
-        }, { once: true })
       }
-    }
-
-    // Try immediately
-    tryPlay()
-
-    // Also try after a short delay to catch any timing issues
-    const timeoutId = setTimeout(() => {
-      if (audio.paused && audio.readyState >= 2) {
-        playAudio()
-      }
-    }, 500)
-
-    return () => {
-      clearTimeout(timeoutId)
+      audio.addEventListener('canplay', handleCanPlay, { once: true })
     }
   }, [isHomePage])
 
