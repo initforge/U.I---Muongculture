@@ -5,8 +5,8 @@ import './Stories.css'
 // Cấu hình PDF.js worker - sử dụng từ public folder (version 5.4.296 từ react-pdf)
 pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs'
 
-// PDF URL từ Vercel Blob Storage
-const PDF_URL = 'https://erub5hkiytu5lnuq.public.blob.vercel-storage.com/Giai%20%C4%91i%E1%BB%87u%20v%C6%B0%E1%BB%A3t%20thung%20l%C5%A9ng.pdf'
+// PDF URL - sử dụng API route để proxy từ Vercel Blob Storage (tránh 403 CORS)
+const PDF_URL = '/api/pdf'
 
 const Stories = () => {
   const [numPages, setNumPages] = useState(null)
@@ -32,14 +32,12 @@ const Stories = () => {
         setError(null)
         setLoadingProgress(0)
 
-        // Bước 1: Fetch PDF và convert sang blob URL để tránh 403
+        // Bước 1: Fetch PDF từ API route (proxy từ Vercel Blob Storage)
         let pdfBlobUrl = null
         try {
-          console.log('Fetching PDF from Vercel Blob Storage...')
+          console.log('Fetching PDF from API route...')
           const response = await fetch(PDF_URL, {
             method: 'GET',
-            mode: 'cors',
-            credentials: 'omit',
             headers: {
               'Accept': 'application/pdf',
             },
@@ -51,7 +49,7 @@ const Stories = () => {
 
           const blob = await response.blob()
           pdfBlobUrl = URL.createObjectURL(blob)
-          console.log('PDF fetched successfully, blob URL created')
+          console.log('PDF fetched successfully from API route, blob URL created')
         } catch (fetchErr) {
           console.error('Error fetching PDF:', fetchErr)
           throw new Error(`Không thể tải file PDF từ server: ${fetchErr.message}`)
