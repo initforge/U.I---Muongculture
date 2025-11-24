@@ -15,6 +15,7 @@ const Stories = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [pdfUrl, setPdfUrl] = useState(null)
+  const [workerReady, setWorkerReady] = useState(false)
 
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages)
@@ -41,9 +42,26 @@ const Stories = () => {
     setPageNumber(page => Math.min(numPages || 1, page + 1))
   }
 
+  // Đảm bảo worker được load trước khi sử dụng
+  useEffect(() => {
+    // Test worker file có accessible không
+    fetch('/pdf.worker.min.mjs', { method: 'HEAD' })
+      .then(() => {
+        console.log('PDF worker is accessible')
+        setWorkerReady(true)
+      })
+      .catch((err) => {
+        console.error('PDF worker not accessible:', err)
+        setError('Không thể tải PDF worker. Vui lòng refresh trang.')
+        setLoading(false)
+      })
+  }, [])
+
   // Sử dụng trực tiếp URL từ Vercel Blob Storage
   // Với file lớn (190MB), dùng trực tiếp URL sẽ tốt hơn blob URL
   useEffect(() => {
+    if (!workerReady) return
+    
     if (!PDF_URL) {
       setError('PDF URL chưa được cấu hình. Vui lòng upload file và cập nhật PDF_URL trong Stories.jsx')
       setLoading(false)
@@ -78,7 +96,7 @@ const Stories = () => {
     }
 
     testUrl()
-  }, [])
+  }, [workerReady])
 
   return (
     <div className="stories-page">
@@ -95,7 +113,11 @@ const Stories = () => {
             </p>
           </div>
 
-          {!pdfUrl ? (
+          {!workerReady ? (
+            <div className="pdf-placeholder">
+              <p>Đang khởi tạo PDF viewer...</p>
+            </div>
+          ) : !pdfUrl ? (
             <div className="pdf-placeholder">
               <p>Đang tải PDF...</p>
             </div>
@@ -144,9 +166,9 @@ const Stories = () => {
                   onLoadSuccess={onDocumentLoadSuccess}
                   onLoadError={onDocumentLoadError}
                   options={{
-                    cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.0/cmaps/',
+                    cMapUrl: `https://cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/cmaps/`,
                     cMapPacked: true,
-                    standardFontDataUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.0.0/standard_fonts/',
+                    standardFontDataUrl: `https://cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/standard_fonts/`,
                   }}
                   loading={
                     <div className="pdf-loading">
