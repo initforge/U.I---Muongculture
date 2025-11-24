@@ -20,12 +20,27 @@ const Stories = () => {
             <div className="canva-embed-wrapper">
               <iframe
                 loading="lazy"
-                src=""
+                src="https://www.canva.com/design/DAG5l5l2Hxo/wyU-b8dlbyNHVuV3D3t-zg/view?embed"
                 title="Canva Design - Truyện Hát Đúm"
                 className="canva-iframe"
                 allowFullScreen
-                allow="fullscreen; autoplay; encrypted-media; microphone; camera; speaker; display-capture"
+                allow="fullscreen"
               ></iframe>
+            </div>
+            <div className="stories-actions">
+              <a
+                href="https://gemini.google.com/share/50adaef67187"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="gemini-btn"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18 13V19A2 2 0 0 1 16 21H5A2 2 0 0 1 3 19V8A2 2 0 0 1 5 6H11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M15 3H21V9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M10 14L21 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Mở Gemini
+              </a>
             </div>
           </div>
         </div>

@@ -86,7 +86,7 @@
   position: relative;
   width: 100%;
   height: 0;
-  padding-top: 56.2500%;
+  padding-top: 77.2727%;
   padding-bottom: 0;
   box-shadow: 0 2px 8px 0 rgba(63, 69, 81, 0.16);
   margin-top: 1.6em;
@@ -105,6 +105,42 @@
   border: none;
   padding: 0;
   margin: 0;
+}
+
+.stories-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.gemini-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--color-primary);
+  color: var(--color-white);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.gemini-btn:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.gemini-btn:active {
+  transform: translateY(0);
+}
+
+.gemini-btn svg {
+  width: 20px;
+  height: 20px;
 }
 
 @media (max-width: 968px) {
