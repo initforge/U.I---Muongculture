@@ -42,7 +42,17 @@ const Stories = () => {
   function onPageLoadError(error) {
     console.error('Page load error:', error)
     setPageLoading(false)
-    setError(`Không thể tải trang ${pageNumber}: ${error?.message || 'Lỗi không xác định'}`)
+    
+    // Nếu là lỗi "Transport destroyed", thử reset Document
+    if (error?.message?.includes('Transport destroyed')) {
+      console.warn('Transport destroyed detected, will retry...')
+      // Reset pageNumber để force re-render
+      setTimeout(() => {
+        setPageNumber(prev => prev)
+      }, 100)
+    } else {
+      setError(`Không thể tải trang ${pageNumber}: ${error?.message || 'Lỗi không xác định'}`)
+    }
   }
 
   function goToPrevPage() {
@@ -159,6 +169,7 @@ const Stories = () => {
 
               <div className="pdf-document-wrapper">
                 <Document
+                  key="pdf-document"
                   file={pdfUrl}
                   onLoadSuccess={onDocumentLoadSuccess}
                   onLoadError={onDocumentLoadError}
@@ -166,6 +177,8 @@ const Stories = () => {
                     cMapUrl: `https://cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/cmaps/`,
                     cMapPacked: true,
                     standardFontDataUrl: `https://cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/standard_fonts/`,
+                    disableAutoFetch: false,
+                    disableStream: false,
                   }}
                   loading={
                     <div className="pdf-loading">
@@ -174,7 +187,6 @@ const Stories = () => {
                   }
                 >
                   <Page 
-                    key={`page-${pageNumber}`}
                     pageNumber={pageNumber} 
                     className="pdf-page"
                     renderTextLayer={false}
