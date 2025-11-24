@@ -29,9 +29,10 @@
 }
 
 .stories-page .content-section .container {
-  max-width: 100%;
-  padding: 0;
+  max-width: 1200px;
+  padding: 0 2rem;
   width: 100%;
+  margin: 0 auto;
 }
 
 .section-header {
@@ -67,7 +68,7 @@
 }
 
 .story-intro {
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto 2.4rem;
   text-align: center;
   padding: 1.6rem 2rem;
@@ -85,9 +86,9 @@
 
 .stories-embed {
   width: 100%;
-  max-width: 100%;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0;
 }
 
 .canva-embed-wrapper {
@@ -176,7 +177,7 @@
   }
 
   .stories-page .content-section .container {
-    padding: 0;
+    padding: 0 1rem;
   }
 
   .section-title {
@@ -192,6 +193,7 @@
   }
 
   .stories-embed {
-    padding: 0 0.5rem;
+    max-width: 100%;
+    padding: 0;
   }
 }
