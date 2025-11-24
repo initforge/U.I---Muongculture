@@ -1,10 +1,9 @@
-import { useState, useEffect } from 'react'
-import { Document, Page, pdfjs } from 'react-pdf'
+import { useState, useEffect, useRef } from 'react'
+import * as pdfjsLib from 'pdfjs-dist'
 import './Stories.css'
 
 // Cấu hình PDF.js worker - sử dụng từ public folder
-// Worker file đã được copy vào public/pdf.worker.min.mjs (version 5.4.296 từ react-pdf)
-pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs'
+pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs'
 
 // PDF URL từ Vercel Blob Storage
 const PDF_URL = 'https://erub5hkiytu5lnuq.public.blob.vercel-storage.com/Giai%20%C4%91i%E1%BB%87u%20v%C6%B0%E1%BB%A3t%20thung%20l%C5%A9ng.pdf'
@@ -15,99 +14,121 @@ const Stories = () => {
   const [loading, setLoading] = useState(true)
   const [pageLoading, setPageLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [pdfUrl, setPdfUrl] = useState(null)
+  const [pdfDoc, setPdfDoc] = useState(null)
+  const canvasRef = useRef(null)
+  const pageCacheRef = useRef(new Map()) // Cache các page đã render
 
-  function onDocumentLoadSuccess({ numPages }) {
-    setNumPages(numPages)
-    setLoading(false)
-    setError(null)
-  }
-
-  function onDocumentLoadError(error) {
-    console.error('PDF load error:', error)
-    console.error('Error details:', {
-      message: error?.message,
-      name: error?.name,
-      stack: error?.stack
-    })
-    setError(`Không thể tải file PDF: ${error?.message || 'Lỗi không xác định'}. Vui lòng kiểm tra lại link hoặc thử lại sau.`)
-    setLoading(false)
-  }
-
-  function onPageLoadSuccess() {
-    setPageLoading(false)
-    setError(null)
-  }
-
-  function onPageLoadError(error) {
-    console.error('Page load error:', error)
-    setPageLoading(false)
-    
-    // Nếu là lỗi "Transport destroyed", thử reset Document
-    if (error?.message?.includes('Transport destroyed')) {
-      console.warn('Transport destroyed detected, will retry...')
-      // Reset pageNumber để force re-render
-      setTimeout(() => {
-        setPageNumber(prev => prev)
-      }, 100)
-    } else {
-      setError(`Không thể tải trang ${pageNumber}: ${error?.message || 'Lỗi không xác định'}`)
+  // Load PDF document
+  useEffect(() => {
+    if (!PDF_URL) {
+      setError('PDF URL chưa được cấu hình.')
+      setLoading(false)
+      return
     }
-  }
+
+    async function loadPdf() {
+      try {
+        setLoading(true)
+        setError(null)
+
+        // Load PDF document
+        const loadingTask = pdfjsLib.getDocument({
+          url: PDF_URL,
+          cMapUrl: `https://cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjsLib.version}/cmaps/`,
+          cMapPacked: true,
+        })
+
+        const pdf = await loadingTask.promise
+        setNumPages(pdf.numPages)
+        setPdfDoc(pdf)
+        setLoading(false)
+
+        console.log(`PDF loaded: ${pdf.numPages} pages`)
+      } catch (err) {
+        console.error('Error loading PDF:', err)
+        setError(`Không thể tải file PDF: ${err.message}`)
+        setLoading(false)
+      }
+    }
+
+    loadPdf()
+  }, [])
+
+  // Render page riêng biệt
+  useEffect(() => {
+    if (!pdfDoc || !canvasRef.current || !pageNumber) return
+
+    // Kiểm tra cache
+    if (pageCacheRef.current.has(pageNumber)) {
+      const cachedCanvas = pageCacheRef.current.get(pageNumber)
+      const currentCanvas = canvasRef.current
+      const ctx = currentCanvas.getContext('2d')
+      ctx.clearRect(0, 0, currentCanvas.width, currentCanvas.height)
+      ctx.drawImage(cachedCanvas, 0, 0)
+      setPageLoading(false)
+      return
+    }
+
+    async function renderPage() {
+      try {
+        setPageLoading(true)
+        setError(null)
+
+        // Get page
+        const page = await pdfDoc.getPage(pageNumber)
+        
+        // Tính toán scale để fit width
+        const viewport = page.getViewport({ scale: 1.0 })
+        const canvas = canvasRef.current
+        const context = canvas.getContext('2d')
+        
+        const maxWidth = Math.min(900, window.innerWidth - 80)
+        const scale = maxWidth / viewport.width
+        const scaledViewport = page.getViewport({ scale })
+
+        // Set canvas size
+        canvas.height = scaledViewport.height
+        canvas.width = scaledViewport.width
+
+        // Render page
+        const renderContext = {
+          canvasContext: context,
+          viewport: scaledViewport,
+        }
+
+        await page.render(renderContext).promise
+
+        // Cache page đã render
+        const cachedCanvas = document.createElement('canvas')
+        cachedCanvas.width = canvas.width
+        cachedCanvas.height = canvas.height
+        const cachedCtx = cachedCanvas.getContext('2d')
+        cachedCtx.drawImage(canvas, 0, 0)
+        pageCacheRef.current.set(pageNumber, cachedCanvas)
+
+        setPageLoading(false)
+        console.log(`Page ${pageNumber} rendered`)
+      } catch (err) {
+        console.error(`Error rendering page ${pageNumber}:`, err)
+        setError(`Không thể tải trang ${pageNumber}: ${err.message}`)
+        setPageLoading(false)
+      }
+    }
+
+    renderPage()
+  }, [pdfDoc, pageNumber])
 
   function goToPrevPage() {
     if (pageNumber > 1) {
-      setPageLoading(true)
-      setPageNumber(page => Math.max(1, page - 1))
+      setPageNumber(page => page - 1)
     }
   }
 
   function goToNextPage() {
     if (pageNumber < (numPages || 1)) {
-      setPageLoading(true)
-      setPageNumber(page => Math.min(numPages || 1, page + 1))
+      setPageNumber(page => page + 1)
     }
   }
-
-  // Sử dụng trực tiếp URL từ Vercel Blob Storage
-  // Với file lớn (190MB), dùng trực tiếp URL sẽ tốt hơn blob URL
-  useEffect(() => {
-    
-    if (!PDF_URL) {
-      setError('PDF URL chưa được cấu hình. Vui lòng upload file và cập nhật PDF_URL trong Stories.jsx')
-      setLoading(false)
-      return
-    }
-
-    // Test xem URL có accessible không
-    async function testUrl() {
-      try {
-        const testResponse = await fetch(PDF_URL, {
-          method: 'HEAD',
-          mode: 'cors',
-        })
-        
-        if (!testResponse.ok) {
-          throw new Error(`URL không accessible: ${testResponse.status}`)
-        }
-        
-        console.log('PDF URL is accessible:', {
-          status: testResponse.status,
-          contentType: testResponse.headers.get('content-type'),
-          contentLength: testResponse.headers.get('content-length')
-        })
-        
-        // Set URL trực tiếp - react-pdf sẽ tự động fetch
-        setPdfUrl(PDF_URL)
-      } catch (err) {
-        console.error('Error testing PDF URL:', err)
-        setError(`Không thể truy cập file PDF: ${err.message}. Vui lòng kiểm tra lại link.`)
-        setLoading(false)
-      }
-    }
-
-    testUrl()
-  }, [])
 
   return (
     <div className="stories-page">
@@ -124,20 +145,27 @@ const Stories = () => {
             </p>
           </div>
 
-          {!pdfUrl ? (
+          {loading ? (
             <div className="pdf-placeholder">
-              <p>Đang tải PDF...</p>
+              <div className="pdf-loading">
+                <div className="loading-spinner"></div>
+                <p>Đang tải PDF...</p>
+              </div>
+            </div>
+          ) : error && !pageLoading ? (
+            <div className="pdf-error">
+              <p>{error}</p>
             </div>
           ) : (
             <div className="pdf-viewer-container">
-              {(loading || pageLoading) && (
+              {pageLoading && (
                 <div className="pdf-loading">
                   <div className="loading-spinner"></div>
-                  <p>{loading ? 'Đang tải truyện...' : `Đang tải trang ${pageNumber}...`}</p>
+                  <p>Đang tải trang {pageNumber}...</p>
                 </div>
               )}
 
-              {error && !pageLoading && (
+              {error && pageLoading && (
                 <div className="pdf-error">
                   <p>{error}</p>
                 </div>
@@ -168,40 +196,15 @@ const Stories = () => {
               </div>
 
               <div className="pdf-document-wrapper">
-                <Document
-                  key="pdf-document"
-                  file={pdfUrl}
-                  onLoadSuccess={onDocumentLoadSuccess}
-                  onLoadError={onDocumentLoadError}
-                  options={{
-                    cMapUrl: `https://cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/cmaps/`,
-                    cMapPacked: true,
-                    standardFontDataUrl: `https://cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/standard_fonts/`,
-                    disableAutoFetch: false,
-                    disableStream: false,
+                <canvas 
+                  ref={canvasRef}
+                  className="pdf-page"
+                  style={{
+                    display: pageLoading ? 'none' : 'block',
+                    maxWidth: '100%',
+                    height: 'auto',
                   }}
-                  loading={
-                    <div className="pdf-loading">
-                      <div className="loading-spinner"></div>
-                    </div>
-                  }
-                >
-                  <Page 
-                    pageNumber={pageNumber} 
-                    className="pdf-page"
-                    renderTextLayer={false}
-                    renderAnnotationLayer={false}
-                    onLoadSuccess={onPageLoadSuccess}
-                    onLoadError={onPageLoadError}
-                    loading={
-                      <div className="pdf-loading">
-                        <div className="loading-spinner"></div>
-                        <p>Đang tải trang {pageNumber}...</p>
-                      </div>
-                    }
-                    width={Math.min(900, window.innerWidth - 80)}
-                  />
-                </Document>
+                />
               </div>
             </div>
           )}
