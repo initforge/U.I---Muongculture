@@ -142,7 +142,7 @@ const Home = () => {
               }
             />
             <ServiceCard
-              title="Đọc truyện bảo tàng Mường"
+              title="Đọc chuyện hát Đúm"
               image="https://res.cloudinary.com/dghawsj8e/image/upload/v1763866478/truyengiandan_wcn8uo.png"
               link="/truyen"
               icon={
@@ -153,7 +153,7 @@ const Home = () => {
               }
             />
             <ServiceCard
-              title="Nghe nhạc bảo tàng Mường"
+              title="Nhạc cụ hát Đúm"
               image="https://res.cloudinary.com/dghawsj8e/image/upload/v1763866477/nhacmuong_zj6qyq.jpg"
               link="/nhac-cu"
               icon={

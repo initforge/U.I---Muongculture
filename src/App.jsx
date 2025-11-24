@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import { AudioContext } from './contexts/AudioContext'
 import Header from './components/Header/Header'
-import Footer from './components/Footer/Footer'
 import ScrollToTop from './components/ScrollToTop/ScrollToTop'
 import Home from './pages/Home/Home'
 import Origin from './pages/Origin/Origin'
@@ -392,7 +391,6 @@ function AppContent() {
             <Route path="/trai-nghiem" element={<Experience />} />
           </Routes>
         </main>
-        <Footer />
       </div>
     </AudioContext.Provider>
   )
