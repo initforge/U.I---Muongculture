@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
-import * as pdfjsLib from 'pdfjs-dist'
+import { pdfjs } from 'react-pdf'
 import './Stories.css'
 
-// Cấu hình PDF.js worker - sử dụng từ public folder
-pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs'
+// Cấu hình PDF.js worker - sử dụng từ public folder (version 5.4.296 từ react-pdf)
+pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs'
 
 // PDF URL từ Vercel Blob Storage
 const PDF_URL = 'https://erub5hkiytu5lnuq.public.blob.vercel-storage.com/Giai%20%C4%91i%E1%BB%87u%20v%C6%B0%E1%BB%A3t%20thung%20l%C5%A9ng.pdf'
@@ -33,13 +33,13 @@ const Stories = () => {
         setLoadingProgress(0)
 
         // Bước 1: Load PDF document
-        const loadingTask = pdfjsLib.getDocument({
+        const loadingTask = pdfjs.getDocument({
           url: PDF_URL,
           httpHeaders: {
             'Accept': 'application/pdf',
           },
           withCredentials: false,
-          cMapUrl: `https://cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjsLib.version}/cmaps/`,
+          cMapUrl: `https://cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/cmaps/`,
           cMapPacked: true,
         })
 
