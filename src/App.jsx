@@ -21,7 +21,7 @@ function AppContent() {
 
   // Initialize audio element immediately with aggressive preloading
   if (!audioRef.current) {
-    audioRef.current = new Audio('https://res.cloudinary.com/dghawsj8e/video/upload/v1763891276/t%C6%B0_li%E1%BB%87u_trang_ch%E1%BB%A7_sxphue.mp3')
+    audioRef.current = new Audio('https://res.cloudinary.com/dghawsj8e/video/upload/v1764466899/Nh%E1%BA%A1c_S%C3%81O_b%C3%A0i_h%C3%A1t_mp3cut.net_zlv1gi.m4a')
     audioRef.current.volume = 0.5 // Giảm 1 nửa âm lượng
     audioRef.current.loop = true
     audioRef.current.preload = 'auto'
